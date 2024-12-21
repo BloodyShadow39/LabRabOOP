@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 5\\LabRab5\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{01ED6485-D3BD-4405-A4FF-D032AA402673}|LabRab5\\LabRab5.vcxproj|C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 5\\LabRab5\\LabRab5\\LabRab5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{01ED6485-D3BD-4405-A4FF-D032AA402673}|LabRab5\\LabRab5.vcxproj|solutionrelative:LabRab5\\LabRab5.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LabRab5.cpp",
+              "DocumentMoniker": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 5\\LabRab5\\LabRab5\\LabRab5.cpp",
+              "RelativeDocumentMoniker": "LabRab5\\LabRab5.cpp",
+              "ToolTip": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 5\\LabRab5\\LabRab5\\LabRab5.cpp",
+              "RelativeToolTip": "LabRab5\\LabRab5.cpp",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAAAE4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-12-21T15:45:03.689Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

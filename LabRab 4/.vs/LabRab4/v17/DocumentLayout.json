@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 4\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F346BB58-3EED-4340-8D8F-DA15EC579E8A}|LabRab4\\LabRab4.vcxproj|C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 4\\LabRab4\\LabRab4.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F346BB58-3EED-4340-8D8F-DA15EC579E8A}|LabRab4\\LabRab4.vcxproj|solutionrelative:LabRab4\\LabRab4.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LabRab4.cpp",
+              "DocumentMoniker": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 4\\LabRab4\\LabRab4.cpp",
+              "RelativeDocumentMoniker": "LabRab4\\LabRab4.cpp",
+              "ToolTip": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 4\\LabRab4\\LabRab4.cpp",
+              "RelativeToolTip": "LabRab4\\LabRab4.cpp",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAAAFYAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-12-21T15:32:06.718Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

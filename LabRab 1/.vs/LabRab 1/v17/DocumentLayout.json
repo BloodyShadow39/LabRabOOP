@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRab 1\\",
+  "WorkspaceRootPath": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A81DDDFF-D644-4F5D-B371-B9FA7D1AEC2A}|LabRab 1\\LabRab 1.vcxproj|C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRab 1\\LabRab 1\\LabRab 1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{A81DDDFF-D644-4F5D-B371-B9FA7D1AEC2A}|LabRab 1\\LabRab 1.vcxproj|C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 1\\LabRab 1\\LabRab 1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A81DDDFF-D644-4F5D-B371-B9FA7D1AEC2A}|LabRab 1\\LabRab 1.vcxproj|solutionrelative:LabRab 1\\LabRab 1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -20,11 +20,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "LabRab 1.cpp",
-              "DocumentMoniker": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRab 1\\LabRab 1\\LabRab 1.cpp",
+              "DocumentMoniker": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 1\\LabRab 1\\LabRab 1.cpp",
               "RelativeDocumentMoniker": "LabRab 1\\LabRab 1.cpp",
-              "ToolTip": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRab 1\\LabRab 1\\LabRab 1.cpp",
+              "ToolTip": "C:\\Users\\BloodyShadow\\Desktop\\\u0423\u0447\u0435\u0431\u0430\\\u041E\u041E\u041F\\LabRabOOP\\LabRab 1\\LabRab 1\\LabRab 1.cpp",
               "RelativeToolTip": "LabRab 1\\LabRab 1.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAAACIAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-07T13:15:38.421Z",
               "EditorCaption": ""

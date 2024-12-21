@@ -113,6 +113,7 @@ public:
 
 // Основная программа с консольным интерфейсом
 int main() {
+    setlocale(LC_ALL, "Russian");
     try {
         double x1, y1, z1, x2, y2, z2;
         std::cout << "Введите координаты первой точки (x1, y1, z1): ";

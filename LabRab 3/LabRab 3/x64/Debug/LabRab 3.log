@@ -1,0 +1,31 @@
+﻿  LabRab 3.cpp
+C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(180,9): error C2660: Array3d::fill: функция не принимает 3 аргументов
+      C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(189,10):
+       см. объявление "Array3d::fill"
+      C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(180,9):
+      при попытке сопоставить список аргументов "(std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>, std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>, double)"
+          with
+          [
+              _Ty=double
+          ]
+  
+C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(185,9): error C2660: Array3d::fill: функция не принимает 3 аргументов
+      C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(189,10):
+       см. объявление "Array3d::fill"
+      C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(185,9):
+      при попытке сопоставить список аргументов "(std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>, std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>, double)"
+          with
+          [
+              _Ty=double
+          ]
+  
+C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(190,9): error C2660: Array3d::fill: функция не принимает 3 аргументов
+      C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(189,10):
+       см. объявление "Array3d::fill"
+      C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab 3\LabRab 3\LabRab 3.cpp(190,9):
+      при попытке сопоставить список аргументов "(std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>, std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>>, double)"
+          with
+          [
+              _Ty=double
+          ]
+  

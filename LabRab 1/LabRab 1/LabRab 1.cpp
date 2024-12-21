@@ -1,9 +1,6 @@
 ﻿#include <iostream>
 #include <cmath>
 #include <stdexcept>
-#include <functional>
-#include <locale>
-#include <windows.h> // Для использования SetConsoleOutputCP
 
 using namespace std;
 
@@ -100,6 +97,7 @@ double test_function(double x) {
 }
 
 int main() {
+    setlocale(LC_ALL, "Russian");
     try {
         // Параметры интегрирования
         double a = 0.0;  // Нижняя граница
