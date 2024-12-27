@@ -5,6 +5,7 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <stack>
 
 using namespace std;
 
@@ -48,23 +49,38 @@ public:
 // Класс для управления историей действий (откат действий)
 class ActionHistory {
 private:
-    vector<KeyboardAction*> history;
+    stack<KeyboardAction*> history;  // Стек выполненных действий
+    stack<KeyboardAction*> undone;   // Стек отменённых действий
+
 public:
     ~ActionHistory() {
         // Освобождение памяти
-        for (auto action : history) {
-            delete action;
+        while (!history.empty()) {
+            delete history.top();
+            history.pop();
+        }
+        while (!undone.empty()) {
+            delete undone.top();
+            undone.pop();
         }
     }
 
     void addAction(KeyboardAction* action) {
-        history.push_back(action);
+        history.push(action);
+        while (!undone.empty()) {
+            // Очистить стек отменённых действий при новом действии
+            delete undone.top();
+            undone.pop();
+        }
     }
 
     void undo() {
         if (!history.empty()) {
-            cout << "Отмена действия: " << history.back()->getName() << endl;
-            history.pop_back();  // Удаление последнего действия
+            // Переносим действие в стек отменённых
+            KeyboardAction* action = history.top();
+            history.pop();
+            undone.push(action);
+            cout << "Отмена действия: " << action->getName() << endl;
         }
         else {
             cout << "Нет действий для отмены!" << endl;
@@ -72,8 +88,17 @@ public:
     }
 
     void redo() {
-        // Для простоты добавим пустую реализацию, так как требование только для отката
-        cout << "Отмена действия: функция не реализована." << endl;
+        if (!undone.empty()) {
+            // Переносим действие обратно в основной стек
+            KeyboardAction* action = undone.top();
+            undone.pop();
+            history.push(action);
+            cout << "Повторное выполнение действия: " << action->getName() << endl;
+            action->execute();  // Выполняем повторно
+        }
+        else {
+            cout << "Нет действий для повторного выполнения!" << endl;
+        }
     }
 };
 
@@ -120,6 +145,11 @@ public:
         history.undo();
     }
 
+    // Метод для выполнения повторного действия (redo)
+    void redoLastAction() {
+        history.redo();
+    }
+
     // Метод для симуляции выполнения workflow
     void runWorkflow(const vector<string>& workflow) {
         for (const auto& key : workflow) {
@@ -158,6 +188,10 @@ int main() {
     // Демонстрация отката действия
     cout << "Откат последнего действия:" << endl;
     keyboard.undoLastAction();
+
+    // Демонстрация повторного выполнения действия
+    cout << "Повторное выполнение последнего действия:" << endl;
+    keyboard.redoLastAction();
 
     // Переназначение клавиш
     cout << "Переназначение клавиш:" << endl;

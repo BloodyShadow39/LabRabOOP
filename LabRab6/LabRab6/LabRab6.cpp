@@ -25,8 +25,8 @@ public:
 // Form (форма)
 class Form : public Control {
 public:
-    void addControl(Control* control) {
-        std::cout << "Вызван метод addControl у контролла Form" << std::endl;
+    virtual void display() {
+        std::cout << "Отображение формы" << std::endl;
     }
 };
 
@@ -35,13 +35,17 @@ class Label : public Control {
 private:
     std::string text;
 public:
-    void setText(const std::string& text) {
+    virtual void setText(const std::string& text) {
         this->text = text;
         std::cout << "Вызван метод setText у контролла Label: " << text << std::endl;
     }
 
-    void getText() {
+    virtual void getText() {
         std::cout << "Вызван метод getText у контролла Label: " << text << std::endl;
+    }
+
+    virtual void display() {
+        std::cout << "Отображение метки: " << text << std::endl;
     }
 };
 
@@ -50,17 +54,21 @@ class TextBox : public Control {
 private:
     std::string text;
 public:
-    void setText(const std::string& text) {
+    virtual void setText(const std::string& text) {
         this->text = text;
         std::cout << "Вызван метод setText у контролла TextBox: " << text << std::endl;
     }
 
-    void getText() {
+    virtual void getText() {
         std::cout << "Вызван метод getText у контролла TextBox: " << text << std::endl;
     }
 
-    void OnValueChanged() {
+    virtual void OnValueChanged() {
         std::cout << "Вызван метод OnValueChanged у контролла TextBox, новый текст: " << text << std::endl;
+    }
+
+    virtual void display() {
+        std::cout << "Отображение текстового поля: " << text << std::endl;
     }
 };
 
@@ -70,12 +78,12 @@ private:
     std::vector<std::string> items;
     int selectedIndex = -1;
 public:
-    void setItems(const std::vector<std::string>& items) {
+    virtual void setItems(const std::vector<std::string>& items) {
         this->items = items;
         std::cout << "Вызван метод setItems у контролла ComboBox" << std::endl;
     }
 
-    void getItems() {
+    virtual void getItems() {
         std::cout << "Вызван метод getItems у контролла ComboBox: ";
         for (const auto& item : items) {
             std::cout << item << " ";
@@ -83,16 +91,24 @@ public:
         std::cout << std::endl;
     }
 
-    void setSelectedIndex(int index) {
+    virtual void setSelectedIndex(int index) {
         if (index >= 0 && index < items.size()) {
             selectedIndex = index;
             std::cout << "Вызван метод setSelectedIndex у контролла ComboBox, выбранный индекс: " << selectedIndex << std::endl;
         }
     }
 
-    int getSelectedIndex() {
+    virtual int getSelectedIndex() {
         std::cout << "Вызван метод getSelectedIndex у контролла ComboBox, выбранный индекс: " << selectedIndex << std::endl;
         return selectedIndex;
+    }
+
+    virtual void display() {
+        std::cout << "Отображение выпадающего списка с элементами: ";
+        for (const auto& item : items) {
+            std::cout << item << " ";
+        }
+        std::cout << std::endl;
     }
 };
 
@@ -101,17 +117,21 @@ class Button : public Control {
 private:
     std::string text;
 public:
-    void setText(const std::string& text) {
+    virtual void setText(const std::string& text) {
         this->text = text;
         std::cout << "Вызван метод setText у контролла Button: " << text << std::endl;
     }
 
-    void getText() {
+    virtual void getText() {
         std::cout << "Вызван метод getText у контролла Button: " << text << std::endl;
     }
 
-    void Click() {
+    virtual void Click() {
         std::cout << "Вызван метод Click у контролла Button, текст кнопки: " << text << std::endl;
+    }
+
+    virtual void display() {
+        std::cout << "Отображение кнопки: " << text << std::endl;
     }
 };
 
@@ -161,27 +181,27 @@ public:
 class LinuxFactory : public AbstractFactory {
 public:
     Form* createForm() override {
-        std::cout << "Создан контрол Form для Linux" << std::endl;
+        std::cout << "Создан контрол Form для Linux с необычным оформлением" << std::endl;
         return new Form();
     }
 
     Label* createLabel() override {
-        std::cout << "Создан контрол Label для Linux" << std::endl;
+        std::cout << "Создан контрол Label для Linux с уникальным шрифтом" << std::endl;
         return new Label();
     }
 
     TextBox* createTextBox() override {
-        std::cout << "Создан контрол TextBox для Linux" << std::endl;
+        std::cout << "Создан контрол TextBox для Linux с поддержкой многоточия" << std::endl;
         return new TextBox();
     }
 
     ComboBox* createComboBox() override {
-        std::cout << "Создан контрол ComboBox для Linux" << std::endl;
+        std::cout << "Создан контрол ComboBox для Linux с иную разметкой" << std::endl;
         return new ComboBox();
     }
 
     Button* createButton() override {
-        std::cout << "Создан контрол Button для Linux" << std::endl;
+        std::cout << "Создан контрол Button для Linux с отличной анимацией" << std::endl;
         return new Button();
     }
 };
@@ -190,27 +210,27 @@ public:
 class MacOSFactory : public AbstractFactory {
 public:
     Form* createForm() override {
-        std::cout << "Создан контрол Form для MacOS" << std::endl;
+        std::cout << "Создан контрол Form для MacOS с макетом по умолчанию" << std::endl;
         return new Form();
     }
 
     Label* createLabel() override {
-        std::cout << "Создан контрол Label для MacOS" << std::endl;
+        std::cout << "Создан контрол Label для MacOS с современным стилем" << std::endl;
         return new Label();
     }
 
     TextBox* createTextBox() override {
-        std::cout << "Создан контрол TextBox для MacOS" << std::endl;
+        std::cout << "Создан контрол TextBox для MacOS с поддержкой эмодзи" << std::endl;
         return new TextBox();
     }
 
     ComboBox* createComboBox() override {
-        std::cout << "Создан контрол ComboBox для MacOS" << std::endl;
+        std::cout << "Создан контрол ComboBox для MacOS с красивыми переходами" << std::endl;
         return new ComboBox();
     }
 
     Button* createButton() override {
-        std::cout << "Создан контрол Button для MacOS" << std::endl;
+        std::cout << "Создан контрол Button для MacOS с стильным дизайном" << std::endl;
         return new Button();
     }
 };
@@ -248,10 +268,11 @@ int main() {
     Button* button = factory->createButton();
 
     // Размещение контроллов на форме
-    form->addControl(label);
-    form->addControl(textBox);
-    form->addControl(comboBox);
-    form->addControl(button);
+    form->display();
+    label->display();
+    textBox->display();
+    comboBox->display();
+    button->display();
 
     // Манипуляции с контроллами
     label->setText("Hello, World!");
