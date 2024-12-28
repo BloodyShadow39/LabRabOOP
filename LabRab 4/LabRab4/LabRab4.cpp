@@ -1,202 +1,288 @@
 ﻿#include <iostream>
-#include <unordered_map>
-#include <functional>
 #include <vector>
 #include <string>
-#include <chrono>
-#include <thread>
-#include <stack>
 
-using namespace std;
-
-// Класс для представления действия, выполняемого на клавише
-class KeyboardAction {
+// Абстрактный базовый класс Control
+class Control {
+protected:
+    int x, y; // Позиция контролла на форме
 public:
-    virtual void execute() = 0;  // Виртуальный метод для выполнения действия
-    virtual string getName() const = 0;  // Возвращает имя действия
-    virtual ~KeyboardAction() = default;
+    virtual void setPosition(int x, int y) {
+        this->x = x;
+        this->y = y;
+        std::cout << "Вызван метод setPosition у контролла " << typeid(*this).name() << " на позиции (" << x << ", " << y << ")" << std::endl;
+    }
+
+    virtual void getPosition() {
+        std::cout << "Вызван метод getPosition у контролла " << typeid(*this).name() << " на позиции (" << x << ", " << y << ")" << std::endl;
+    }
+
+    virtual ~Control() = default;
 };
 
-// Пример конкретного действия - Печать текста
-class PrintTextAction : public KeyboardAction {
+// Конкретные контроллы
+
+// Form (форма)
+class Form : public Control {
+public:
+    virtual void display() {
+        std::cout << "Отображение формы" << std::endl;
+    }
+};
+
+// Label (метка)
+class Label : public Control {
 private:
-    string text;
+    std::string text;
 public:
-    PrintTextAction(const string& text) : text(text) {}
-
-    void execute() override {
-        cout << text << endl;
+    virtual void setText(const std::string& text) {
+        this->text = text;
+        std::cout << "Вызван метод setText у контролла Label: " << text << std::endl;
     }
 
-    string getName() const override {
-        return "PrintTextAction: " + text;
+    virtual void getText() {
+        std::cout << "Вызван метод getText у контролла Label: " << text << std::endl;
+    }
+
+    virtual void display() {
+        std::cout << "Отображение метки: " << text << std::endl;
     }
 };
 
-// Пример действия для выхода из программы
-class ExitAction : public KeyboardAction {
-public:
-    void execute() override {
-        cout << "Выход из программы..." << endl;
-        exit(0);  // Прерывание программы
-    }
-
-    string getName() const override {
-        return "ExitAction";
-    }
-};
-
-// Класс для управления историей действий (откат действий)
-class ActionHistory {
+// TextBox (текстовое поле)
+class TextBox : public Control {
 private:
-    stack<KeyboardAction*> history;  // Стек выполненных действий
-    stack<KeyboardAction*> undone;   // Стек отменённых действий
-
+    std::string text;
 public:
-    ~ActionHistory() {
-        // Освобождение памяти
-        while (!history.empty()) {
-            delete history.top();
-            history.pop();
-        }
-        while (!undone.empty()) {
-            delete undone.top();
-            undone.pop();
-        }
+    virtual void setText(const std::string& text) {
+        this->text = text;
+        std::cout << "Вызван метод setText у контролла TextBox: " << text << std::endl;
     }
 
-    void addAction(KeyboardAction* action) {
-        history.push(action);
-        while (!undone.empty()) {
-            // Очистить стек отменённых действий при новом действии
-            delete undone.top();
-            undone.pop();
-        }
+    virtual void getText() {
+        std::cout << "Вызван метод getText у контролла TextBox: " << text << std::endl;
     }
 
-    void undo() {
-        if (!history.empty()) {
-            // Переносим действие в стек отменённых
-            KeyboardAction* action = history.top();
-            history.pop();
-            undone.push(action);
-            cout << "Отмена действия: " << action->getName() << endl;
-        }
-        else {
-            cout << "Нет действий для отмены!" << endl;
-        }
+    virtual void OnValueChanged() {
+        std::cout << "Вызван метод OnValueChanged у контролла TextBox, новый текст: " << text << std::endl;
     }
 
-    void redo() {
-        if (!undone.empty()) {
-            // Переносим действие обратно в основной стек
-            KeyboardAction* action = undone.top();
-            undone.pop();
-            history.push(action);
-            cout << "Повторное выполнение действия: " << action->getName() << endl;
-            action->execute();  // Выполняем повторно
-        }
-        else {
-            cout << "Нет действий для повторного выполнения!" << endl;
-        }
+    virtual void display() {
+        std::cout << "Отображение текстового поля: " << text << std::endl;
     }
 };
 
-// Класс для виртуальной клавиатуры
-class Keyboard {
+// ComboBox (выпадающий список)
+class ComboBox : public Control {
 private:
-    unordered_map<string, KeyboardAction*> keyBindings;  // Переназначенные клавиши
-    ActionHistory history;  // История действий
-    bool isRunning;  // Признак работы клавиатуры
-
+    std::vector<std::string> items;
+    int selectedIndex = -1;
 public:
-    Keyboard() : isRunning(true) {}
+    virtual void setItems(const std::vector<std::string>& items) {
+        this->items = items;
+        std::cout << "Вызван метод setItems у контролла ComboBox" << std::endl;
+    }
 
-    ~Keyboard() {
-        // Освобождение памяти от переназначенных действий
-        for (auto& binding : keyBindings) {
-            delete binding.second;
+    virtual void getItems() {
+        std::cout << "Вызван метод getItems у контролла ComboBox: ";
+        for (const auto& item : items) {
+            std::cout << item << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    virtual void setSelectedIndex(int index) {
+        if (index >= 0 && index < items.size()) {
+            selectedIndex = index;
+            std::cout << "Вызван метод setSelectedIndex у контролла ComboBox, выбранный индекс: " << selectedIndex << std::endl;
         }
     }
 
-    // Метод для назначения действия на клавишу
-    void bindKey(const string& key, KeyboardAction* action) {
-        // Освобождение старого действия для клавиши
-        if (keyBindings.find(key) != keyBindings.end()) {
-            delete keyBindings[key];
+    virtual int getSelectedIndex() {
+        std::cout << "Вызван метод getSelectedIndex у контролла ComboBox, выбранный индекс: " << selectedIndex << std::endl;
+        return selectedIndex;
+    }
+
+    virtual void display() {
+        std::cout << "Отображение выпадающего списка с элементами: ";
+        for (const auto& item : items) {
+            std::cout << item << " ";
         }
-        keyBindings[key] = action;
-    }
-
-    // Метод для симуляции нажатия клавиши
-    void pressKey(const string& key) {
-        if (keyBindings.find(key) != keyBindings.end()) {
-            cout << "Нажата клавиша: " << key << endl;
-            keyBindings[key]->execute();
-            history.addAction(keyBindings[key]);  // Сохраняем действие в историю
-        }
-        else {
-            cout << "Не назначено действие для клавиши: " << key << endl;
-        }
-    }
-
-    // Метод для выполнения отката
-    void undoLastAction() {
-        history.undo();
-    }
-
-    // Метод для выполнения повторного действия (redo)
-    void redoLastAction() {
-        history.redo();
-    }
-
-    // Метод для симуляции выполнения workflow
-    void runWorkflow(const vector<string>& workflow) {
-        for (const auto& key : workflow) {
-            pressKey(key);
-            // Задержка между нажатиями клавиш (симуляция реального времени)
-            this_thread::sleep_for(chrono::seconds(1));
-        }
-    }
-
-    // Метод для завершения работы клавиатуры
-    void stop() {
-        isRunning = false;
+        std::cout << std::endl;
     }
 };
 
+// Button (кнопка)
+class Button : public Control {
+private:
+    std::string text;
+public:
+    virtual void setText(const std::string& text) {
+        this->text = text;
+        std::cout << "Вызван метод setText у контролла Button: " << text << std::endl;
+    }
+
+    virtual void getText() {
+        std::cout << "Вызван метод getText у контролла Button: " << text << std::endl;
+    }
+
+    virtual void Click() {
+        std::cout << "Вызван метод Click у контролла Button, текст кнопки: " << text << std::endl;
+    }
+
+    virtual void display() {
+        std::cout << "Отображение кнопки: " << text << std::endl;
+    }
+};
+
+// Абстрактная фабрика
+class AbstractFactory {
+public:
+    virtual Form* createForm() = 0;
+    virtual Label* createLabel() = 0;
+    virtual TextBox* createTextBox() = 0;
+    virtual ComboBox* createComboBox() = 0;
+    virtual Button* createButton() = 0;
+    virtual ~AbstractFactory() = default;
+};
+
+// Конкретные фабрики
+
+// Windows Factory
+class WindowsFactory : public AbstractFactory {
+public:
+    Form* createForm() override {
+        std::cout << "Создан контрол Form для Windows" << std::endl;
+        return new Form();
+    }
+
+    Label* createLabel() override {
+        std::cout << "Создан контрол Label для Windows" << std::endl;
+        return new Label();
+    }
+
+    TextBox* createTextBox() override {
+        std::cout << "Создан контрол TextBox для Windows" << std::endl;
+        return new TextBox();
+    }
+
+    ComboBox* createComboBox() override {
+        std::cout << "Создан контрол ComboBox для Windows" << std::endl;
+        return new ComboBox();
+    }
+
+    Button* createButton() override {
+        std::cout << "Создан контрол Button для Windows" << std::endl;
+        return new Button();
+    }
+};
+
+// Linux Factory
+class LinuxFactory : public AbstractFactory {
+public:
+    Form* createForm() override {
+        std::cout << "Создан контрол Form для Linux с необычным оформлением" << std::endl;
+        return new Form();
+    }
+
+    Label* createLabel() override {
+        std::cout << "Создан контрол Label для Linux с уникальным шрифтом" << std::endl;
+        return new Label();
+    }
+
+    TextBox* createTextBox() override {
+        std::cout << "Создан контрол TextBox для Linux с поддержкой многоточия" << std::endl;
+        return new TextBox();
+    }
+
+    ComboBox* createComboBox() override {
+        std::cout << "Создан контрол ComboBox для Linux с иную разметкой" << std::endl;
+        return new ComboBox();
+    }
+
+    Button* createButton() override {
+        std::cout << "Создан контрол Button для Linux с отличной анимацией" << std::endl;
+        return new Button();
+    }
+};
+
+// MacOS Factory
+class MacOSFactory : public AbstractFactory {
+public:
+    Form* createForm() override {
+        std::cout << "Создан контрол Form для MacOS с макетом по умолчанию" << std::endl;
+        return new Form();
+    }
+
+    Label* createLabel() override {
+        std::cout << "Создан контрол Label для MacOS с современным стилем" << std::endl;
+        return new Label();
+    }
+
+    TextBox* createTextBox() override {
+        std::cout << "Создан контрол TextBox для MacOS с поддержкой эмодзи" << std::endl;
+        return new TextBox();
+    }
+
+    ComboBox* createComboBox() override {
+        std::cout << "Создан контрол ComboBox для MacOS с красивыми переходами" << std::endl;
+        return new ComboBox();
+    }
+
+    Button* createButton() override {
+        std::cout << "Создан контрол Button для MacOS с стильным дизайном" << std::endl;
+        return new Button();
+    }
+};
+
+// Клиентский код
 int main() {
     setlocale(LC_ALL, "Russian");
-    // Создание клавиатуры
-    Keyboard keyboard;
+    AbstractFactory* factory;
 
-    // Создание действий
-    KeyboardAction* printHello = new PrintTextAction("Hello, world!");
-    KeyboardAction* printGoodbye = new PrintTextAction("Goodbye, world!");
-    KeyboardAction* exitAction = new ExitAction();
+    // Выбор операционной системы
+    std::string os;
+    std::cout << "Выберите операционную систему (Windows/Linux/MacOS): ";
+    std::cin >> os;
 
-    // Назначение действий клавишам
-    keyboard.bindKey("A", printHello);
-    keyboard.bindKey("B", printGoodbye);
-    keyboard.bindKey("X", exitAction);
+    // Создаем нужную фабрику
+    if (os == "Windows") {
+        factory = new WindowsFactory();
+    }
+    else if (os == "Linux") {
+        factory = new LinuxFactory();
+    }
+    else if (os == "MacOS") {
+        factory = new MacOSFactory();
+    }
+    else {
+        std::cout << "Неверный выбор!" << std::endl;
+        return 1;
+    }
 
-    // Симуляция workflow: последовательности нажатий клавиш
-    vector<string> workflow = { "A", "B", "X" };
-    cout << "Начало Workflow:" << endl;
-    keyboard.runWorkflow(workflow);
+    // Создание контроллов через выбранную фабрику
+    Form* form = factory->createForm();
+    Label* label = factory->createLabel();
+    TextBox* textBox = factory->createTextBox();
+    ComboBox* comboBox = factory->createComboBox();
+    Button* button = factory->createButton();
 
-    // Демонстрация отката действия
-    cout << "Откат последнего действия:" << endl;
-    keyboard.undoLastAction();
+    // Размещение контроллов на форме
+    form->display();
+    label->display();
+    textBox->display();
+    comboBox->display();
+    button->display();
 
-    // Демонстрация повторного выполнения действия
-    cout << "Повторное выполнение последнего действия:" << endl;
-    keyboard.redoLastAction();
+    // Манипуляции с контроллами
+    label->setText("Hello, World!");
+    textBox->setText("Sample Text");
+    comboBox->setItems({ "Option 1", "Option 2", "Option 3" });
+    comboBox->setSelectedIndex(1);
+    button->setText("Click Me");
+    button->Click();
 
-    // Переназначение клавиш
-    cout << "Переназначение клавиш:" << endl;
-    keyboard.bindKey("A", new PrintTextAction("New Action for A"));
-    keyboard.runWorkflow({ "A", "B", "X" });
-
+    // Завершаем работу
+    delete factory;
     return 0;
 }
