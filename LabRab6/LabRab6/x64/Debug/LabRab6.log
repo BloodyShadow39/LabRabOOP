@@ -1,2 +1,2 @@
 ﻿  LabRab6.cpp
-  LabRab6.vcxproj -> C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab6\x64\Debug\LabRab6.exe
+C:\Users\BloodyShadow\Desktop\Учеба\ООП\LabRabOOP\LabRab6\LabRab6\LabRab6.cpp(3,10): error C1083: Не удается открыть файл включение: contr.hpp: No such file or directory,

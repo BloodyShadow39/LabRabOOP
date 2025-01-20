@@ -1,101 +1,192 @@
-﻿#include <iostream>
+﻿#include <thread> //для sleep_for()
+#include <iostream>
 #include <vector>
-#include <unordered_map>
-#include <functional>
-#include <thread>
-#include <chrono>
-
+#include <string>
 using namespace std;
 
-// Класс для виртуальной клавиатуры
-class VirtualKeyboard {
+//класс команды
+class Command //класс родитель
+{
+protected:
+    string m_name;
+    bool m_undo_flag = false; //флажок для функции отмены
 public:
-    // Тип для действия, связанного с клавишей
-    using Action = std::function<void()>;
+    Command() { m_name = "Command"; };
 
-    // Добавление переназначаемой клавиши с действием
-    void assignKey(char key, Action action) {
-        keyBindings[key] = action;
-    }
+    // virtual значит, что функция может быть переопределена в потомках
+    virtual void Activation() {};
+    string GetName() { return m_name; };    //геттер
+    virtual void Undo() {};                 //команда отмены
+};
 
-    // Выполнение действия для клавиши
-    void pressKey(char key) {
-        if (keyBindings.find(key) != keyBindings.end()) {
-            keyBindings[key]();
-            actionHistory.push_back([this, key]() { undoKeyPress(key); });  // Сохранить для отката
-        }
-        else {
-            cout << "No action assigned to key '" << key << "'" << endl;
-        }
-    }
+//классы-потомки
+class SpeedUp : public Command //команда увеличения скорости (с наследованием класса команда)
+{
+public:
+    SpeedUp() : Command() { m_name = "Speed up"; };
 
-    // Откат последнего действия
-    void undoLastAction() {
-        if (!actionHistory.empty()) {
-            actionHistory.back()(); // Выполняем функцию отката
-            actionHistory.pop_back();
-        }
-        else {
-            cout << "No actions to undo!" << endl;
-        }
-    }
+    //override для переопределения функций
+    void Activation() override { cout << "Volume Speed Increased" << endl; }
+    void Undo() override { m_undo_flag = true; }    //команда отмены
+};
 
-    // Перезапуск Workflow (сброс действий и истории)
-    void resetWorkflow() {
-        actionHistory.clear();
-        cout << "Workflow reset!" << endl;
-    }
+class SpeedDown : public Command //команда уменьшения скорости (с наследованием класса команда)
+{
+public:
+    SpeedDown() : Command() { m_name = "Speed down"; };
 
-    // Демонстрация нажатий клавиш с задержками
-    void simulateKeyPresses(const vector<char>& keys) {
-        for (char key : keys) {
-            pressKey(key);
-            this_thread::sleep_for(chrono::milliseconds(500));  // Задержка между нажатиями
-        }
-    }
+    //override для переопределения функций
+    void Activation() override { cout << "Volume Speed Decreased" << endl; }
+    void Undo() override { m_undo_flag = true; }    //команда отмены 
+};
 
-private:
-    // Словарь для переназначения клавиш
-    unordered_map<char, Action> keyBindings;
+class VolumeUp : public Command //команда увеличения громкости (с наследованием класса команда)
+{
+public:
+    VolumeUp() : Command() { m_name = "Volume up"; };
 
-    // История выполненных действий для отката
-    vector<std::function<void()>> actionHistory;
+    //override для переопределения функций
+    void Activation() override { cout << "Volume Level Increased" << endl; }
+    void Undo() override { m_undo_flag = true; }    //команда отмены
+};
 
-    // Откат действия для клавиши
-    void undoKeyPress(char key) {
-        cout << "Undo action for key: " << key << endl;
+class VolumeDown : public Command //команда уменьшения громкости (с наследованием класса команда)
+{
+public:
+    VolumeDown() : Command() { m_name = "Volume down"; };
+
+    //override для переопределения функций
+    void Activation() override { cout << "Volume Level Decreased" << endl; }
+    void Undo() override { m_undo_flag = true; }    //команда отмены
+};
+
+class PressCommand : public Command //команда активации (с наследованием класса команда)
+{
+public:
+    PressCommand() : Command() { m_name = "PressCommand"; };
+
+    //override для переопределения функций
+    void Activation() override { cout << "Command activated:" << m_name << endl; }
+    void Undo() override //команда отмены
+    {
+        cout << "Undo: " << m_name << endl;
+        m_undo_flag = true;
     }
 };
 
-int main() {
-    VirtualKeyboard keyboard;
+//класс клавиши
+class Key
+{
+private:
+    string m_name = ""; //пустые строки
+    string m_com_name = "";
 
-    // Назначаем действия для клавиш
-    keyboard.assignKey('A', []() { cout << "Action for A\n"; });
-    keyboard.assignKey('B', []() { cout << "Action for B\n"; });
-    keyboard.assignKey('C', []() { cout << "Action for C\n"; });
+    Command* m_command = nullptr; //пока что пустой указатель на объект класса Command
+    bool m_undo_flag = false; //флажок для отмены
 
-    // Демонстрация работы клавиатуры с симуляцией нажатий
-    vector<char> sequence = { 'A', 'B', 'C', 'A', 'B' };
-    cout << "Simulating key presses:\n";
-    keyboard.simulateKeyPresses(sequence);
+public:
+    Key(string name, Command* command)
+    {
+        m_command = command; //присваем значения
+        m_name = name;
+    }
 
-    // Откат последнего действия
-    cout << "\nUndoing last action:\n";
-    keyboard.undoLastAction();
+    void Press() //команда активации
+    {
+        m_command->Activation(); //m_command указывает на объект класса Command - функцию активации 
+        this_thread::sleep_for(chrono::milliseconds(500)); //приостанавливает выполнение программы на 500 миллисекунд
+    }
 
-    // Сброс Workflow
-    cout << "\nResetting workflow:\n";
-    keyboard.resetWorkflow();
+    void KeyUndo() //команда отмены
+    {
+        m_command->Undo(); //m_command указывает на объект класса Command - функцию отмены
+        this_thread::sleep_for(chrono::milliseconds(500)); //приостанавливает выполнение программы на 500 миллисекунд
+    }
 
-    // Переназначаем клавишу
-    cout << "\nReassigning key 'A' to a new action:\n";
-    keyboard.assignKey('A', []() { cout << "New action for A\n"; });
+    string GetName() { return m_name; } //геттер
+};
 
-    // Перезапускаем Workflow с новыми назначениями
-    sequence = { 'A', 'B', 'C' };
-    cout << "Simulating key presses after reassignment:\n";
-    keyboard.simulateKeyPresses(sequence);
+//класс клавиатуры
+class KeyBoard
+{
+private:
+    vector <Key> m_keys{}; //векторы
+    vector <Key> m_log{}; //логгер
 
-    return 0;
-}
+public:
+    KeyBoard() {}
+
+    void AddKey(Key key) { m_keys.push_back(key); } //заполняем вектор
+    void PressKey(string key_name)
+    {
+        bool flag = false;
+        for (int x = 0; x < m_keys.size(); x++)
+        {
+            if (m_keys[x].GetName() == key_name)  // проверяем, есть ли клавиша с именем key_name в векторе m_keys
+                //если да, вызываем команду активации для этой клавиши
+            {
+                m_keys[x].Press();
+                flag = true;
+                m_log.push_back(m_keys[x]); //добавляем в вектор логов эту клавишу
+            }
+        }
+        if (flag == false) { cout << "[Unable key]" << endl; } //если нет - ошибка
+    }
+
+    void Undo() // отмена команды
+    {
+        Key temp = m_keys[m_keys.size() - 1]; //последний элемент вектора клавиши
+        cout << "[Undo command]: " << temp.GetName() << endl; //сообщение об отмене  команды
+        temp.KeyUndo(); //отмена команды
+        m_log.pop_back(); //убираем последний элемент из вектора логов
+    }
+
+    void ActiveCommands() //красивый вывод в консоль
+    {
+        cout << "\033[38;5;122m" << endl; //перекрашиваем текст, чтоб было красиво
+        this_thread::sleep_for(chrono::milliseconds(500)); //приостанавка программы на 500 миллисекунд
+        //выводим активные команады
+        cout << endl;
+        cout << "________________________________________________________________________________________________________________________";
+        cout << "Active commands: " << endl;
+        for (int c = 0; c < m_log.size(); c++) //выводим из вектора логов
+        {
+            cout << m_log[c].GetName() << endl;
+        }
+        cout << endl;
+        cout << "________________________________________________________________________________________________________________________";
+        cout << endl;
+        this_thread::sleep_for(chrono::milliseconds(500)); //приостанавка программы на 500 миллисекунд
+        cout << "\033[0m" << endl;//перекрашиваем текст обратно
+    }
+};
+
+
+int main()
+{
+    KeyBoard test;
+
+    //пример 1
+    SpeedUp s1; //увеличиваем скорость
+    // VolumeDown s1; //уменьшаем громкость
+    string example1_ = "EXP 1";
+    Key example1(example1_, &s1);
+    test.AddKey(example1); //добавляем клавишу
+
+
+    test.PressKey("EXP 1"); //активация
+    test.PressKey("EXP 1"); //повторная активация
+    test.ActiveCommands();  //смотрим какие команды активны
+
+    test.Undo(); //отмена
+    test.ActiveCommands(); //смотрим какие команды активны
+    test.PressKey("EXP 1");//повторная активация
+
+    //пример 2 
+    //VolumeUp s2; //увеличиваем громкость
+    SpeedDown s2; //понижаем скорость
+    string example2_ = "EXP 2";
+    Key second(example2_, &s2);
+    test.AddKey(second);//добавляем клавишу
+    test.PressKey("EXP 2"); //активация
+    test.ActiveCommands(); //смотрим какие команды активны
